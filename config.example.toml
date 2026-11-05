@@ -1,0 +1,59 @@
+# Copy to ~/.config/ambilight-hue-sync/config.toml and fill in.
+# Secrets can stay out of this file: every one of them can also be set as an
+# environment variable (see README), for example from a systemd EnvironmentFile.
+
+[tv]
+host = "192.168.1.20"          # Philips TV (JointSpace API v6, HTTPS port 1926)
+username = ""                  # or AMBILIGHT_TV_USERNAME, digest auth user from pairing
+password = ""                  # or AMBILIGHT_TV_PASSWORD
+interval = 0.15                # seconds between Ambilight reads
+safe_interval = 0.4            # used for 60 s after any read error
+# Some TVs number one edge from the top. Set true for an edge where index 0 is
+# the top pixel, so start/end below always count from the bottom.
+top_first = { left = false, right = true }
+
+[hue]
+host = "192.168.1.10"          # Hue Bridge
+entertainment_area = "TV area" # name of the entertainment area in the Hue app
+credentials_file = "~/.config/ambilight-hue-sync/hue.json"  # written by `register`
+fps = 25                       # stream rate to the bridge
+# snapshot_file = "~/.cache/ambilight-hue-sync/snapshot.json"
+
+[tuning]
+dark = 0.04                    # below this brightness a light switches off
+smoothing = [0.12, 0.25, 0.18] # time constants in seconds: rise, fall, colour
+
+# One block per light. name must match the device name in the Hue app.
+# side: left, right, top, bottom or all (whole frame)
+# start/end: slice of that edge, 0.0 = bottom (or left end of the top edge)
+# scale: brightness multiplier, useful for a light that should stay dimmer
+
+[[light]]
+name = "Lightstrip"
+side = "left"
+start = 0.0
+end = 1.0
+smoothing = [0.22, 0.35, 0.28] # a long strip looks calmer with slower fades
+
+[[light]]
+name = "Play bar right low"
+side = "right"
+start = 0.0
+end = 0.5
+
+[[light]]
+name = "Play bar right high"
+side = "right"
+start = 0.5
+end = 1.0
+
+[[light]]
+name = "Go lamp"
+side = "top"
+start = 0.65
+end = 1.0
+
+[[light]]
+name = "Ceiling bulb"
+side = "all"
+scale = 0.55

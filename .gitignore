@@ -1,0 +1,15 @@
+config.toml
+*.local.toml
+hue.json
+hue-ent.json
+.env
+env
+snapshot.json
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+build/
+dist/

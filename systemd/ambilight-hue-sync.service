@@ -1,0 +1,25 @@
+# User unit. Install with:
+#   mkdir -p ~/.config/systemd/user
+#   cp systemd/ambilight-hue-sync.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now ambilight-hue-sync
+#   sudo loginctl enable-linger "$USER"   # keep it running without a login session
+[Unit]
+Description=Philips TV Ambilight to Hue Entertainment sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Path of the venv created in the README quick start.
+ExecStart=%h/.local/share/ambilight-hue-sync/venv/bin/ambilight-hue-sync run
+# Optional: secrets as AMBILIGHT_* variables, file mode 0600.
+EnvironmentFile=-%h/.config/ambilight-hue-sync/env
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=10
+# Leaves time to stop the stream and restore the lights.
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target
